@@ -1,15 +1,16 @@
 Package: mvreprobit
-Title: Multivariate random effect Probit model estimation
+Title: Multivariate random effect probit model estimation
 Version: 0.0.1
-Authors@R: 
-    person(given = "Siliang",
-           family = "Zhang",
+Authors@R: c(
+    person("Siliang", "Zhang",
            role = c("aut", "cre"),
            email = "zhangsiliang123@gmail.com",
-           comment = c(ORCID = "0000-0002-2641-4944"))
-Description: This package provides Gibbs sampling procedure for doing 
-  multivariate random effect modelling with 1 factor (two levels) and 
-  3 factors modelling.
+           comment = c(ORCID = "0000-0002-2641-4944")),
+    person("Fiona", "steele", role = "aut")
+    )
+Maintainer: Siliang Zhang <zhangsiliang123@gmail.com>
+Description: Efficient Gibbs sampling procedures for multivariate random 
+             effect probit model estimation.
 Imports: 
       truncnorm,
       mvtnorm,

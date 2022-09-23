@@ -45,6 +45,7 @@ mvreprobit_1factor_Gibbs <- function(Y, x_covs, i_ind, max_steps, cor_step_size 
   extra <- 6
   width <- 30
   time <- remainining <- 0
+  rejection_rate <- 0
   for(iter in 1:max_steps){
     # cat('\r iter: ', iter, 'mu=',coeffs[1,])
     init[iter] <- Sys.time()
@@ -62,11 +63,11 @@ mvreprobit_1factor_Gibbs <- function(Y, x_covs, i_ind, max_steps, cor_step_size 
     # sample Y_star
     Y_star <- sample_Y_star_3fac(Y_pos_ind, Y_zero_ind, Y_star, Sigma_e,
                                  Xbeta + U_all[i_ind,])
-    cat(' sample Y done |')
+    # cat(' sample Y done |')
     # sample U
     U_all <- sample_X_all1_3fac(U_all, Sigma_e_inv, Sigma_u_inv, t_len,
                                 rowsum(Y_star - Xbeta, i_ind, reorder = T))
-    cat('sample U done |')
+    # cat('sample U done |')
     # update parameters
     params <- sample_params_1fac(x_covs, XtX, Y_star, U_all, coeffs,
                                  Sigma_e, Sigma_e_inv, Sigma_u, i_ind, cor_step_size)

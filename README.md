@@ -10,7 +10,7 @@ It contains tailored Gibbs sampling procedures for multivariate random effect pr
 
 ## Installation
 
-[Home](https://github.com/slzhang-fd/mvreprobit/wiki)
+See [Wiki](https://github.com/slzhang-fd/mvreprobit/wiki) page
 
 ## Demo examples
 
@@ -19,11 +19,12 @@ It contains tailored Gibbs sampling procedures for multivariate random effect pr
 [2. Four processes three factor probit model](https://github.com/slzhang-fd/mvreprobit/wiki/2.-Four-processes-three-factor-probit-model)
 
 ### Libraries and dependencies used by the code
-- truncnorm
-- mvtnorm
-- MCMCpack
-- matrixcalc
+
+-   truncnorm
+-   mvtnorm
+-   MCMCpack
+-   matrixcalc
 
 ### License
-GPL v3.0
 
+GPL v3.0

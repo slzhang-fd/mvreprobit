@@ -1,5 +1,5 @@
 #' @export
-mvreprobit_3factor_Gibbs <- function(Y, x_covs, j_ind, i_ind, jt_ind, max_steps, cor_step_size = 0.01){
+mvreprobit_3re_Gibbs <- function(Y, x_covs, j_ind, i_ind, jt_ind, max_steps, cor_step_size = 0.01){
   K <- ncol(Y)
   rcd_num <- nrow(Y)
   ind_num <- max(i_ind)
@@ -46,23 +46,23 @@ mvreprobit_3factor_Gibbs <- function(Y, x_covs, j_ind, i_ind, jt_ind, max_steps,
     Xbeta <- x_covs %*% coeffs
     ## stochastic E step
     # sample Y_star
-    Y_star <- sample_Y_star_3fac(Y_pos_ind, Y_zero_ind, Y_star, Sigma_e,
+    Y_star <- sample_Y_star_3re(Y_pos_ind, Y_zero_ind, Y_star, Sigma_e,
                                  Xbeta + V_all[j_ind,] + U_all[i_ind,] + W_all[jt_ind,])
     # cat(' sample Y done |')
     # sample U
-    U_all <- sample_X_all1_3fac(U_all, Sigma_e_inv, Sigma_u_inv, t_len,
+    U_all <- sample_X_all1_3re(U_all, Sigma_e_inv, Sigma_u_inv, t_len,
                                 rowsum(Y_star - Xbeta - V_all[j_ind,] - W_all[jt_ind,], i_ind, reorder = T))
     # cat('sample U done |')
     # sample V
-    V_all <- sample_X_all1_3fac(V_all, Sigma_e_inv, Sigma_v_inv, it_len,
+    V_all <- sample_X_all1_3re(V_all, Sigma_e_inv, Sigma_v_inv, it_len,
                                 rowsum(Y_star - Xbeta - U_all[i_ind,] - W_all[jt_ind,], j_ind, reorder = T))
     # cat('sample V done |')
     # sample W
-    W_all <- sample_X_all1_3fac(W_all, Sigma_e_inv, Sigma_w_inv, i_len,
+    W_all <- sample_X_all1_3re(W_all, Sigma_e_inv, Sigma_w_inv, i_len,
                                 rowsum(Y_star - Xbeta - U_all[i_ind,] - V_all[j_ind,], jt_ind, reorder = T))
     # cat('sample W done')
     # update parameters
-    params <- sample_params_3fac(x_covs, XtX, Y_star, U_all, V_all, W_all, coeffs,
+    params <- sample_params_3re(x_covs, XtX, Y_star, U_all, V_all, W_all, coeffs,
                                  Sigma_e, Sigma_e_inv, Sigma_u, Sigma_v, Sigma_w, j_ind, i_ind, jt_ind, cor_step_size)
     coeffs <- params$coeffs
     Sigma_e <- params$Sigma_e
@@ -98,7 +98,7 @@ mvreprobit_3factor_Gibbs <- function(Y, x_covs, j_ind, i_ind, jt_ind, max_steps,
 }
 
 #' @export
-mvreprobit_3factor_Gibbs_addon <- function(Y, x_covs, j_ind, i_ind, jt_ind, max_steps, res, cor_step_size = 0.02){
+mvreprobit_3re_Gibbs_addon <- function(Y, x_covs, j_ind, i_ind, jt_ind, max_steps, res, cor_step_size = 0.02){
   K <- ncol(Y)
   rcd_num <- nrow(Y)
   ind_num <- max(i_ind)
@@ -135,23 +135,23 @@ mvreprobit_3factor_Gibbs_addon <- function(Y, x_covs, j_ind, i_ind, jt_ind, max_
     Xbeta <- x_covs %*% coeffs
     ## stochastic E step
     # sample Y_star
-    Y_star <- sample_Y_star_3fac(Y_pos_ind, Y_zero_ind, Y_star, Sigma_e,
+    Y_star <- sample_Y_star_3re(Y_pos_ind, Y_zero_ind, Y_star, Sigma_e,
                                  Xbeta + V_all[j_ind,] + U_all[i_ind,] + W_all[jt_ind,])
     cat(' sample Y done |')
     # sample U
-    U_all <- sample_X_all1_3fac(U_all, Sigma_e_inv, Sigma_u_inv, t_len,
+    U_all <- sample_X_all1_3re(U_all, Sigma_e_inv, Sigma_u_inv, t_len,
                                 rowsum(Y_star - Xbeta - V_all[j_ind,] - W_all[jt_ind,], i_ind, reorder = T))
     cat('sample U done |')
     # sample V
-    V_all <- sample_X_all1_3fac(V_all, Sigma_e_inv, Sigma_v_inv, it_len,
+    V_all <- sample_X_all1_3re(V_all, Sigma_e_inv, Sigma_v_inv, it_len,
                                 rowsum(Y_star - Xbeta - U_all[i_ind,] - W_all[jt_ind,], j_ind, reorder = T))
     cat('sample V done |')
     # sample W
-    W_all <- sample_X_all1_3fac(W_all, Sigma_e_inv, Sigma_w_inv, i_len,
+    W_all <- sample_X_all1_3re(W_all, Sigma_e_inv, Sigma_w_inv, i_len,
                                 rowsum(Y_star - Xbeta - U_all[i_ind,] - V_all[j_ind,], jt_ind, reorder = T))
     cat('sample W done')
     # update parameters
-    params <- sample_params_3fac(x_covs, Y_star, U_all, V_all, W_all, coeffs,
+    params <- sample_params_3re(x_covs, Y_star, U_all, V_all, W_all, coeffs,
                                  Sigma_e, Sigma_e_inv, Sigma_u, Sigma_v, Sigma_w, j_ind, i_ind, jt_ind, cor_step_size)
     coeffs <- params$coeffs
     Sigma_e <- params$Sigma_e
@@ -177,7 +177,13 @@ mvreprobit_3factor_Gibbs_addon <- function(Y, x_covs, j_ind, i_ind, jt_ind, max_
               'W_all'=W_all))
 }
 #' @export
-res_summary_3fac_Gibbs <- function(mvreprobit_res, xcov, burnin){
+res_summary_3re_Gibbs <- function(mvreprobit_res, xcov, burnin, chains2=NULL){
+  if(!is.null(chains2)){
+    for(i in 1:5)
+      chains2[[i]] <- chains2[[i]][-(1:burnin),]
+
+    mvreprobit_res <- Map(rbind, mvreprobit_res, chains2)
+  }
   K <- sqrt(ncol(mvreprobit_res$Sigma_e_all))
   p <- ncol(mvreprobit_res$coeffs_all) / K
   stem_len <- nrow(mvreprobit_res$coeffs_all)

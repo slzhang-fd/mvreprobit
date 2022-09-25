@@ -1,7 +1,7 @@
 #' @importFrom truncnorm rtruncnorm
 #' @importFrom mvtnorm rmvnorm
 #' @noRd
-sample_Y_star_3fac <- function(Y_pos_ind, Y_zero_ind, Y_star, Sigma_e, mu_v_u_w){
+sample_Y_star_3re <- function(Y_pos_ind, Y_zero_ind, Y_star, Sigma_e, mu_v_u_w){
   K <- ncol(Y_star)
   if(K==1){
     Y_star[Y_pos_ind[,1],1] <- rtruncnorm(1, a=0, mean = mu_v_u_w[Y_pos_ind[,1]], sd = 1)
@@ -22,7 +22,7 @@ sample_Y_star_3fac <- function(Y_pos_ind, Y_zero_ind, Y_star, Sigma_e, mu_v_u_w)
   Y_star
 }
 #' @noRd
-sample_X_all1_3fac <- function(X_all, Sigma_e_inv, Sigma_x_inv, x_len, temp){
+sample_X_all1_3re <- function(X_all, Sigma_e_inv, Sigma_x_inv, x_len, temp){
   # temp <- rowsum(Y_star - Xbeta - U_all[i_ind,] - V_all[j_ind,], jt_ind, reorder = T)
   for(pp in unique(x_len)){
     sigma_X_cond <- solve(pp * Sigma_e_inv + Sigma_x_inv)
@@ -33,7 +33,7 @@ sample_X_all1_3fac <- function(X_all, Sigma_e_inv, Sigma_x_inv, x_len, temp){
   X_all
 }
 #' @noRd
-Optim_step_3fac <- function(x_covs, Y_star, U_all, V_all, W_all, coeffs,
+Optim_step_3re <- function(x_covs, Y_star, U_all, V_all, W_all, coeffs,
                             B_e, Sigma_e_inv, B_u, B_v, B_w, j_ind, i_ind, jt_ind){
   K <- ncol(Y_star)
   p <- nrow(coeffs)
@@ -145,8 +145,8 @@ sample_coeffs <- function(X, XtX, Z, Sigma_inv){
   return(matrix(params, ncol = K))
 }
 #' @noRd
-sample_params_3fac <- function(x_covs, XtX, Y_star, U_all, V_all, W_all, coeffs,
-                               Sigma_e, Sigma_e_inv, Sigma_u, Sigma_v, Sigma_w, j_ind, i_ind, jt_ind, sample_params_3fac){
+sample_params_3re <- function(x_covs, XtX, Y_star, U_all, V_all, W_all, coeffs,
+                               Sigma_e, Sigma_e_inv, Sigma_u, Sigma_v, Sigma_w, j_ind, i_ind, jt_ind, sample_params_3re){
   K <- ncol(Y_star)
   p <- nrow(coeffs)
   ## sample coeffs
@@ -154,7 +154,7 @@ sample_params_3fac <- function(x_covs, XtX, Y_star, U_all, V_all, W_all, coeffs,
   ## sample Sigma_e
   if(K > 1){
     Sigma_e <- sample_sigmae_MH(Sigma_e, Sigma_e_inv,
-                                Y_star - x_covs %*% coeffs - V_all[j_ind,] - U_all[i_ind,] - W_all[jt_ind,], sample_params_3fac)
+                                Y_star - x_covs %*% coeffs - V_all[j_ind,] - U_all[i_ind,] - W_all[jt_ind,], sample_params_3re)
   }
 
   ## sample Sigma_u
@@ -200,4 +200,16 @@ summary_res_basic <- function(x, name, rownum, colnum, dimnames){
               matrix(apply(matrix(x, ncol = rownum * colnum), 2, quantile, 0.975), rownum, colnum, dimnames=dimnames))
   names(res) <- paste0(name, c('', '_sd', '_low2.5', '_high97.5'))
   return(res)
+}
+#' @export
+res_compare_plot <- function(refit_res, true_val, burn_in) {
+  refit_res <- refit_res[(burn_in + 1):nrow(refit_res), ]
+  yl <- apply(refit_res, 2, quantile, 0.025)
+  yu <- apply(refit_res, 2, quantile, 0.975)
+  ## to remove warnings of arrows commmand
+  yu <- pmax(yl+mean(yl)*0.001, yu)
+  x <- seq_len(ncol(refit_res))
+  plot(x, true_val, ylim = range(c(yl, yu)), pch = 19, cex = .3, xaxt = "n")
+  axis(1, at = x)
+  arrows(x, yl, x, yu, angle = 90, code = 3, length = .04)
 }

@@ -4,7 +4,8 @@ Efficient Gibbs sampling procedures for multivariate random effect probit model 
 
 ## Description
 
-The `mvreprobit` R package contains code associated with the article \> Steele, F., Zhang, S., Grundy, E., and Burchardt, T. (2022). Longitudinal analysis of exchanges of support between parents and children in the UK.
+The `mvreprobit` R package contains code associated with the article 
+> Steele, F., Zhang, S., Grundy, E., and Burchardt, T. (2022). Longitudinal analysis of exchanges of support between parents and children in the UK.
 
 It contains tailored Gibbs sampling procedures for multivariate random effect probit modelling. It currently includes both 1-factor and 3-factor random effects probit models used in the paper. The code is concise, self-explaining, and is capable to be extended to any number of variates and random effects of arbitrary multilevel designs.
 

@@ -20,9 +20,9 @@ See [Wiki](https://github.com/slzhang-fd/mvreprobit/wiki) page
 
 ## Demo examples
 
-[1. Four-process 2-level (1 random effect) probit model](https://github.com/slzhang-fd/mvreprobit/wiki/1.-Four-processes-one-random-effect-probit-model)
+[1. Four-process 2-level (1 random effect) probit model](https://github.com/slzhang-fd/mvreprobit/wiki/Demo-1)
 
-[2. Four-process 3-level (3 random effects) probit model, with additional time-varying level 3 random effect](https://github.com/slzhang-fd/mvreprobit/wiki/2.-Four-processes-three-random-effects-probit-model)
+[2. Four-process 3-level (3 random effects) probit model](https://github.com/slzhang-fd/mvreprobit/wiki/Demo-2)
 
 ### Libraries and dependencies used by the code
 

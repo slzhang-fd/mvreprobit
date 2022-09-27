@@ -189,7 +189,7 @@ res_summary_3re_Gibbs <- function(mvreprobit_res, xcov, burnin, chains2=NULL){
   stem_len <- nrow(mvreprobit_res$coeffs_all)
   cov_names <- names(xcov)
   process_names <- NULL
-  process_names <- c('tpprac', 'tpfin', 'fpprac', 'fpfin')[1:K]
+  process_names <- c('Y1', 'Y2', 'Y3', 'Y4')[1:K]
   CORR_u_all <- matrix(0, stem_len - burnin, K*K)
   for(iter in (burnin+1):stem_len){
     CORR_u_all[iter-burnin,] <- cov2corr(mvreprobit_res$Sigma_u_all[iter,])
